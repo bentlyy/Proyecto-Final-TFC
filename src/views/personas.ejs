@@ -1,0 +1,91 @@
+<%- include ('partials/_header') %>
+
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-7">
+            <table class="table table-bordered table-hover">
+                <thead>
+                    <tr>
+                        <th>Nombre</th>
+                        <th>Apellido</th>
+                        <th>Email </th>
+                        <th>Direccion </th>
+                        <th>Tipo </th>
+                        <th>Ubicacion </th>
+                        <th>Fecha </th>
+                        <th>Acciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <% if (data) { %>
+                        <% data.forEach(function(item) { %>
+                            <tr>
+                                <td><%= item.nombrepersona %></td>
+                                <td><%= item.apellidopersona %></td>
+                                <td><%= item.email %></td>
+                                <td><%= item.direccion %></td>
+                                <td><%= item.tipo %></td>
+                                <td><%= item.ubicacion %></td>
+                                <td><%= item.fechanacimiento %></td>
+                                <td>
+                                    <a href="/delete/<%= item.rutpersona %> " class="btn btn-danger">Delete</a>
+                                    <a href="/update/<%= item.rutpersona %> " class="btn btn-info">Update</a>
+                                </td>
+                                
+                                
+                            </tr>
+                        <% }); %>
+                    <% } %>
+                </tbody>
+            </table>
+
+        </div>
+        <div class="col-md-5">
+           <div class="card">
+            <div class="card-body">
+                <form action="/add" method="post">
+                    <div class="form-group">
+                        <input type="text" name="rutpersona" placeholder="Rut" class="form-control">
+                    </div>
+                    <div class="form-group">
+                        <input type="text" name="nombrepersona" placeholder="Nombre" class="form-control">
+                    </div>
+                    <div class="form-group">
+                        <input type="text" name="apellidopersona" placeholder="Apellido" class="form-control">
+                    </div>
+                    <div class="form-group">
+                        <input type="email" name="email" placeholder="Email" class="form-control">
+                    </div>
+                    <div class="form-group">
+                        <input type="text" name="direccion" placeholder="Direccion" class="form-control">
+                    </div>
+                    <div class="form-group">
+                        <input type="text" name="tipo" placeholder="Tipo" class="form-control">
+                    </div>
+                    <div class="form-group">
+                        <input type="text" name="ubicacion" placeholder="Ubicacion" class="form-control">
+                    </div>
+                    <div class="form-group">
+                        <input type="date" name="fechanacimiento" placeholder="Fecha de nacimiento" class="form-control">
+                    </div>
+                    <div class="form-group">
+                        <input type="password" name="contraseña" placeholder="Contraseña" class="form-control">
+                    </div>
+                    <button type="submit" class="btn btn-primary">
+                        Guardar persona
+                    </button>
+                </form>
+                <div class="container">
+                    <!-- ... (your existing register form) -->
+                    <p>ya tienes una cuenta? <a href="/login">Login</a></p>
+                    <p>vuelve a <a href="/">Home</a></p>
+                </div>
+                
+            </div>
+           </div> 
+        </div>
+    </div>
+</div>
+
+<%- include ('partials/_footer') %>

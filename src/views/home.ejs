@@ -1,0 +1,15 @@
+<%- include ('partials/_header') %>
+
+<div class="container">
+    <h1>Welcome to the Home Page</h1>
+    <% if (loggedin) { %>
+        <p>Hello, <%= username %>! estas logueado.</p>
+        <a href="/salas">Go to Salas</a>
+    <% } else { %>
+        <p>no estas logueado. porfavor logueate o registrate</p>
+        <a href="/login">Login</a>
+        <a href="/persona">Register</a>
+    <% } %>
+</div>
+
+<%- include ('partials/_footer') %>

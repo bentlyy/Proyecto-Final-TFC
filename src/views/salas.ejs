@@ -1,0 +1,61 @@
+<%- include ('partials/_header') %>
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-7">
+            <table class="table table-bordered table-hover">
+                <thead>
+                    <tr>
+                        <th>Nombre Sala</th>
+                        <th>Capacidad</th>
+                        <th>Descripción</th>
+                        <th>Estado</th>
+                        
+                    </tr>
+                </thead>
+                <tbody>
+                    <% if (data) { %>
+                        <% data.forEach(function(item) { %>
+                            <tr>
+                                <td><%= item.nombresala %></td>
+                                <td><%= item.capacidad %></td>
+                                <td><%= item.descripcion %></td>
+                                <td><%= item.estado %></td>
+                                <td>
+                                    <a href="/delete/<%= item.salaid %>" class="btn btn-danger">Delete</a>
+                                    <a href="/update/<%= item.salaid %>" class="btn btn-info">Update</a>
+                                    <a href="/reserva" class="btn btn-primary">Reservar</a>
+                                </td>
+                            </tr>
+                        <% }); %>
+                    <% } %>
+                </tbody>
+            </table>
+        </div>
+        <div class="col-md-5">
+            <div class="card">
+                <div class="card-body">
+                    <form action="/add" method="post">
+                        <div class="form-group">
+                            <input type="text" name="nombresala" placeholder="Nombre Sala" class="form-control">
+                        </div>
+                        <div class="form-group">
+                            <input type="number" name="capacidad" placeholder="Capacidad" class="form-control">
+                        </div>
+                        <div class="form-group">
+                            <input type="text" name="descripcion" placeholder="Descripción" class="form-control">
+                        </div>
+                        <div class="form-group">
+                            <input type="text" name="estado" placeholder="Estado" class="form-control">
+                        </div>
+                        <button type="submit" class="btn btn-primary">
+                            Guardar sala
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<%- include ('partials/_footer') %>
