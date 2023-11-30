@@ -24,8 +24,8 @@
                                 <td><%= item.comentario %></td>
                                 <td><%= item.estado %></td>
                                 <td>
-                                    <a href="/delete/<%= item.reservasid %> " class="btn btn-danger">Delete</a>
-                                    <a href="/update/<%= item.reservasid %> " class="btn btn-info">Update</a>
+                                    <a href="/delete/<%= item.reservaid %> " class="btn btn-danger">Delete</a>
+                                    <a href="/update/<%= item.reservaid %> " class="btn btn-info">Update</a>
                                 </td>
                             </tr>
                         <% }); %>
@@ -36,7 +36,7 @@
         <div class="col-md-5">
            <div class="card">
             <div class="card-body">
-                <form action="/add" method="post">
+                <form action="/reserva/add" method="post">
                     <div class="form-group">
                         <input type="date" name="fechareserva" placeholder="Fecha de Reserva" class="form-control">
                     </div>

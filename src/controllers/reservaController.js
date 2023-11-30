@@ -1,8 +1,44 @@
-const controller = {};
+const reservaController = {};
 const bcrypt = require('bcrypt');
 
 // Middleware para cargar personas y salas antes de cada solicitud
-controller.loadPersonasSalas = (req, res, next) => {
+
+
+reservaController.list = (req, res) => {
+    req.getConnection((err, conn) => {
+        if (err) {
+            res.json(err);
+        }
+
+        // Realizamos las consultas para obtener reservas, personas y salas
+        conn.query('SELECT * FROM reservas', (err, reservas) => {
+            if (err) {
+                res.json(err);
+            }
+
+            conn.query('SELECT * FROM personas', (err, personas) => {
+                if (err) {
+                    res.json(err);
+                }
+
+                conn.query('SELECT * FROM salas', (err, salas) => {
+                    if (err) {
+                        res.json(err);
+                    }
+
+                    // Renderizamos la vista y pasamos los datos necesarios
+                    res.render('reserva', {
+                        data: reservas,
+                        personas: personas,
+                        salas: salas
+                    });
+                });
+            });
+        });
+    });
+};
+
+reservaController.loadPersonasSalas = (req, res, next) => {
     req.getConnection((err, conn) => {
         if (err) {
             return next(err);
@@ -25,76 +61,54 @@ controller.loadPersonasSalas = (req, res, next) => {
     });
 };
 
-controller.list = (req, res) => {
-    req.getConnection((err, conn) => {
-        conn.query('SELECT * FROM reservas', (err, reservas) => {
-            if (err) {
-                res.json(err);
-            }
 
-            res.render('reservas', {
-                data: reservas,
-                personas: personas,
-                salas: salas
 
-            });
-        });
-    });
-};
 
-controller.save = (req, res) => {
+
+reservaController.save = (req, res) => {
     const data = req.body;
 
-   
-    const salaid = data.salaid;
-    const rutpersona = data.rutpersona;
+    // Formatear la fecha y la hora
+    const fechahoraInicio = `${data.fechareserva} ${data.horainicio}`;
+    const fechahoraFinal = `${data.fechareserva} ${data.horafinal}`;
 
-    
     const reservaData = {
-        fechareserva: data.fechareserva,
-        horainicio: data.horainicio,
-        horafinal: data.horafinal,
+        fechareserva: fechahoraInicio,
+        horainicio: fechahoraInicio,
+        horafinal: fechahoraFinal,
         comentario: data.comentario,
         estado: data.estado,
-       
+        salaid: data.salaid,
+        rutpersona: data.rutpersona,
     };
 
     req.getConnection((err, conn) => {
-       
+        if (err) {
+            console.error('Error de conexión:', err);
+            return res.status(500).send('Error interno del servidor');
+        }
+
+        // Insertar reserva
         conn.query('INSERT INTO reservas SET ?', [reservaData], (err, result) => {
             if (err) {
-                console.error('Error de consulta en reservas:', err);
-                return res.status(500).send('Error al insertar en la base de datos');
+                console.error('Error al insertar reserva:', err);
+                return res.status(500).send('Error interno del servidor');
             }
 
-            
-            const reservasId = result.insertId;
-
-            
-            const usuariosData = {
-                reservasid: reservasId,
-                salaid: salaid,
-                rutpersona: rutpersona,
-                
-            };
-
-            conn.query('INSERT INTO usuarios SET ?', [usuariosData], (err, resultUsuarios) => {
-                if (err) {
-                    console.error('Error de consulta en usuarios:', err);
-                    return res.status(500).send('Error al insertar en la base de datos');
-                }
-
-                
-                conn.release();
-
-                
-                res.redirect('/');
-            });
+            console.log('Reserva insertada correctamente');
+            res.redirect('/reserva');
         });
     });
 };
 
-controller.delete = (req, res) => {
+function formatTime(time) {
+    // Asegurarse de que el formato de la hora sea HH:mm
+    const parts = time.split(':');
+    const formattedTime = `${parts[0].padStart(2, '0')}:${parts[1].padStart(2, '0')}`;
+    return formattedTime;
+}
+
+reservaController.delete = (req, res) => {
     const { reservasid } = req.params;
 
     req.getConnection((err, conn) => {
@@ -115,7 +129,7 @@ controller.delete = (req, res) => {
     });
 };
 
-controller.edit = (req, res) => {
+reservaController.edit = (req, res) => {
     const { reservasid } = req.params;
     req.getConnection((err, conn) => {
         conn.query('SELECT * FROM reservas WHERE reservasid = ?', [reservasid], (err, reservas) => {
@@ -129,7 +143,7 @@ controller.edit = (req, res) => {
     });
 };
 
-controller.update = (req, res) => {
+reservaController.update = (req, res) => {
     const { reservasid } = req.params;
     const newReserva = req.body;
     req.getConnection((err, conn) => {
@@ -142,4 +156,4 @@ controller.update = (req, res) => {
     });
 };
 
-module.exports = controller;
+module.exports = reservaController;

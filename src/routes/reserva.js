@@ -6,8 +6,8 @@ router.get(reservaController.loadPersonasSalas);
 
 router.get('/', reservaController.list);
 router.post('/add', reservaController.save);
-router.get('/delete/:reservasid', reservaController.delete);
-router.get('/edit/:reservasid', reservaController.edit);
-router.post('/update/:reservasid', reservaController.update);
+router.get('/delete/:reservaid', reservaController.delete);
+router.get('/edit/:reservaid', reservaController.edit);
+router.post('/update/:reservaid', reservaController.update);
 
 module.exports = router;
