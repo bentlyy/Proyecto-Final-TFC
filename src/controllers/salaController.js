@@ -29,7 +29,7 @@ salaController.save = (req, res) => {
                 return res.status(500).send('Error interno del servidor');
             }
 
-            // Consultar los datos actualizados
+            
             conn.query('SELECT * FROM salas', (err, data) => {
                 if (err) {
                     console.error('Error al obtener datos de la base de datos:', err);

@@ -1,0 +1,57 @@
+<%- include ('partials/_header') %>
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-7">
+            <h2>Editar Reserva</h2>
+            <form action="/reserva/update/<%= data.reservaid %>" method="post">
+                <div class="form-group">
+                    <label for="fechareserva">Fecha de Reserva:</label>
+                    <input type="date" name="fechareserva" class="form-control" value="<%= data.fechareserva %>">
+                </div>
+                <div class="form-group">
+                    <label for="horainicio">Hora de Inicio:</label>
+                    <input type="text" name="horainicio" class="form-control" value="<%= data.horainicio %>">
+                </div>
+                <div class="form-group">
+                    <label for="horafinal">Hora Final:</label>
+                    <input type="time" name="horafinal" class="form-control" value="<%= data.horafinal %>">
+                </div>
+                <div class="form-group">
+                    <label for="comentario">Comentario:</label>
+                    <input type="text" name="comentario" class="form-control" value="<%= data.comentario %>">
+                </div>
+                <div class="form-group">
+                    <label for="estado">Estado:</label>
+                    <input type="text" name="estado" class="form-control" value="<%= data.estado %>">
+                </div>
+                <!-- Agregar campo para seleccionar la persona -->
+                <div class="form-group">
+                    <select name="rutpersona" class="form-control">
+                        <% if (personas) { %>
+                            <% personas.forEach(function(persona) { %>
+                                <option value="<%= persona.rutpersona %>"><%= persona.nombrepersona %></option>
+                            <% }); %>
+                        <% } %>
+                    </select>
+                </div>
+                <!-- Agregar campo para seleccionar la sala -->
+                <div class="form-group">
+                    <select name="salaid" class="form-control">
+                        <% if (salas) { %>
+                            <% salas.forEach(function(sala) { %>
+                                <option value="<%= sala.salaid %>"><%= sala.nombresala %></option>
+                            <% }); %>
+                        <% } %>
+                    </select>
+                </div>
+
+                <button type="submit" class="btn btn-primary">
+                    Guardar cambios
+                </button>
+            </form>
+        </div>
+    </div>
+</div>
+
+<%- include ('partials/_footer') %>

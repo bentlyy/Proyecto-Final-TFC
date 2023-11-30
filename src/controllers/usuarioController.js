@@ -29,13 +29,13 @@ controller.delete = (req, res) => {
     req.getConnection((err, conn) => {
         if (err) {
             console.error('Error de conexión:', err);
-            return res.status(500).json(err); // Devuelve un error al cliente
+            return res.status(500).json(err); 
         }
 
         conn.query('DELETE FROM usuarios WHERE usuarioid = ?', [usuarioid], (err, result) => {
             if (err) {
                 console.error('Error al eliminar datos:', err);
-                return res.status(500).json(err); // Devuelve un error al cliente
+                return res.status(500).json(err); 
             }
 
             console.log('Datos eliminados correctamente');

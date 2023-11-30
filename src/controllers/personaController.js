@@ -35,7 +35,7 @@ personaController.save = (req, res) => {
                 return res.status(500).send('Error interno del servidor');
             }
 
-            // Consultar los datos actualizados
+            
             conn.query('SELECT * FROM personas', (err, data) => {
                 if (err) {
                     console.error('Error al obtener datos de la base de datos:', err);
@@ -56,13 +56,13 @@ personaController.delete = (req, res) => {
     req.getConnection((err, conn) => {
         if (err) {
             console.error('Error de conexión:', err);
-            return res.status(500).json(err); // Devuelve un error al cliente
+            return res.status(500).json(err); 
         }
 
         conn.query('DELETE FROM personas WHERE rutpersona = ?', [rutpersona], (err, result) => {
             if (err) {
                 console.error('Error al eliminar datos:', err);
-                return res.status(500).json(err); // Devuelve un error al cliente
+                return res.status(500).json(err); 
             }
 
             console.log('Datos eliminados correctamente');
@@ -77,16 +77,16 @@ personaController.edit = (req, res) => {
         conn.query('SELECT * FROM personas WHERE rutpersona = ?', [rutpersona], (err, rows) => {
             if (err) {
                 console.log(err);
-                // Manejar el error de alguna manera
+                
                 return res.status(500).send('Error interno del servidor');
             }
 
-            // Verificar si se encontraron resultados
+            
             if (rows.length > 0) {
-                // Renderizar la vista de edición con los datos
+                
                 res.render('personas_edit', { data: rows[0] });
             } else {
-                // Manejar el caso en que no se encontraron resultados
+                
                 return res.status(404).send('Persona no encontrada');
             }
         });

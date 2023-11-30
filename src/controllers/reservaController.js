@@ -1,7 +1,6 @@
 const reservaController = {};
 const bcrypt = require('bcrypt');
 
-// Middleware para cargar personas y salas antes de cada solicitud
 
 
 reservaController.list = (req, res) => {
@@ -10,7 +9,7 @@ reservaController.list = (req, res) => {
             res.json(err);
         }
 
-        // Realizamos las consultas para obtener reservas, personas y salas
+        
         conn.query('SELECT * FROM reservas', (err, reservas) => {
             if (err) {
                 res.json(err);
@@ -26,7 +25,7 @@ reservaController.list = (req, res) => {
                         res.json(err);
                     }
 
-                    // Renderizamos la vista y pasamos los datos necesarios
+                   
                     res.render('reserva', {
                         data: reservas,
                         personas: personas,
@@ -68,7 +67,7 @@ reservaController.loadPersonasSalas = (req, res, next) => {
 reservaController.save = (req, res) => {
     const data = req.body;
 
-    // Formatear la fecha y la hora
+    
     const fechahoraInicio = `${data.fechareserva} ${data.horainicio}`;
     const fechahoraFinal = `${data.fechareserva} ${data.horafinal}`;
 
@@ -88,7 +87,7 @@ reservaController.save = (req, res) => {
             return res.status(500).send('Error interno del servidor');
         }
 
-        // Insertar reserva
+        
         conn.query('INSERT INTO reservas SET ?', [reservaData], (err, result) => {
             if (err) {
                 console.error('Error al insertar reserva:', err);
@@ -102,7 +101,7 @@ reservaController.save = (req, res) => {
 };
 
 function formatTime(time) {
-    // Asegurarse de que el formato de la hora sea HH:mm
+   
     const parts = time.split(':');
     const formattedTime = `${parts[0].padStart(2, '0')}:${parts[1].padStart(2, '0')}`;
     return formattedTime;
@@ -130,28 +129,47 @@ reservaController.delete = (req, res) => {
 };
 
 reservaController.edit = (req, res) => {
-    const { reservasid } = req.params;
+    const { reservaid } = req.params;
+
     req.getConnection((err, conn) => {
-        conn.query('SELECT * FROM reservas WHERE reservasid = ?', [reservasid], (err, reservas) => {
-            console.log(reservas);
-            res.render('reservas_edit', {
+        if (err) {
+            console.error('Error de conexión:', err);
+            return res.status(500).json(err);
+        }
+
+        conn.query('SELECT * FROM reservas WHERE reservaid = ?', [reservaid], (err, reservas) => {
+            if (err) {
+                console.error('Error al obtener datos:', err);
+                return res.status(500).json(err);
+            }
+
+            res.render('reserva_edit', {
                 data: reservas[0],
-                personas: req.personas, 
-                salas: req.salas 
+                personas: req.personas,
+                salas: req.salas,
             });
         });
     });
 };
 
 reservaController.update = (req, res) => {
-    const { reservasid } = req.params;
+    const { reservaid } = req.params;
     const newReserva = req.body;
+
     req.getConnection((err, conn) => {
-        conn.query('UPDATE reservas SET ? WHERE reservasid = ?', [newReserva, reservasid], (err, rows) => {
+        if (err) {
+            console.error('Error de conexión:', err);
+            return res.status(500).json(err);
+        }
+
+        conn.query('UPDATE reservas SET ? WHERE reservaid = ?', [newReserva, reservaid], (err, result) => {
             if (err) {
-                console.log(err);
+                console.error('Error al actualizar datos:', err);
+                return res.status(500).json(err);
             }
-            res.redirect('/');
+
+            console.log('Datos actualizados correctamente');
+            res.redirect('/reserva');
         });
     });
 };
