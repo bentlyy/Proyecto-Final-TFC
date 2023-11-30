@@ -23,12 +23,21 @@ app.use(myConnection(mysql, {
 app.use(express.urlencoded({ extended: false }));
 
 
+
+
 const session = require('express-session');
 app.use(session({
   secret: 'secret',
   resave: true,
   saveUninitialized: true
 }));
+
+// Static files
+app.use(express.static(path.join(__dirname, 'public')));
+// Importando rutas
+// ...
+
+app.use(express.urlencoded({ extended: false }));
 
 
 // Importando rutas
@@ -40,21 +49,31 @@ const salaRoutes = require('./routes/sala');
 const usuarioRoutes = require('./routes/usuario');
 const menuRoutes = require('./routes/menu');
 
-
 // Routes
-app.use('/persona', personaRoutes);
+app.use('/persona',personaRoutes);
 app.use('/', homeRoutes);
 app.use('/login', loginRoutes);
 app.use('/reserva', reservaRoutes);
-app.use('/salas', salaRoutes);
+app.use('/sala', salaRoutes);
 app.use('/usuario', usuarioRoutes);
 app.use('/menu', menuRoutes);
 
 
+
+// ...
+
+
+console.log(app._router.stack.map(r => r.route?.path));
 // Static files
-app.use(express.static(path.join(__dirname, 'public')));
+
 
 // Iniciar el servidor
 app.listen(app.get('port'), () => {
   console.log('Server is running on port 3000');
+});
+
+
+app.use((err, req, res, next) => {
+  console.error(err.stack);
+  res.status(500).send('Error interno del servidor');
 });

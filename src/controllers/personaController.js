@@ -8,21 +8,44 @@ personaController.list = (req, res ) =>{
                 res.json(err);
             }
           
-            res.render('personas', {
-                data: personas
-            });
+            res.render('persona', { data: personas });
         });
     });
 };
 
 
 
-personaController.save = (req,res) => {
+personaController.save = (req, res) => {
+    console.log('Controlador save llamado');
     const data = req.body;
     req.getConnection((err, conn) => {
-    conn.query('INSERT INTO personas set ?',[data],(err,personas) => {
-        res.redirect('personas');
-    });
+        if (err) {
+            console.error('Error al guardar persona:', err);
+            return res.status(500).send('Error interno del servidor');
+        }
+
+        conn.query('INSERT INTO personas SET ?', [data], (err, result) => {
+            if (err) {
+                if (err.code === 'ER_DUP_ENTRY') {
+                    console.error('Error al insertar en la base de datos: Entrada duplicada');
+                    return res.status(400).send('Error: Ya existe una persona con este rut.');
+                }
+
+                console.error('Error al insertar en la base de datos:', err);
+                return res.status(500).send('Error interno del servidor');
+            }
+
+            // Consultar los datos actualizados
+            conn.query('SELECT * FROM personas', (err, data) => {
+                if (err) {
+                    console.error('Error al obtener datos de la base de datos:', err);
+                    return res.status(500).send('Error interno del servidor');
+                }
+
+                console.log('Persona insertada correctamente:', result);
+                res.render('persona', { data: data });
+            });
+        });
     });
 };
 
@@ -51,10 +74,21 @@ personaController.delete = (req, res) => {
 personaController.edit = (req, res) => {
     const { rutpersona } = req.params;
     req.getConnection((err, conn) => {
-        conn.query('SELECT * FROM personas WHERE rutpersona=?', [rutpersona], (err, persona) =>{
-    res.render('personas_edit', {
-    data: persona[0]
-            });
+        conn.query('SELECT * FROM personas WHERE rutpersona = ?', [rutpersona], (err, rows) => {
+            if (err) {
+                console.log(err);
+                // Manejar el error de alguna manera
+                return res.status(500).send('Error interno del servidor');
+            }
+
+            // Verificar si se encontraron resultados
+            if (rows.length > 0) {
+                // Renderizar la vista de edición con los datos
+                res.render('personas_edit', { data: rows[0] });
+            } else {
+                // Manejar el caso en que no se encontraron resultados
+                return res.status(404).send('Persona no encontrada');
+            }
         });
     });
 };
@@ -64,7 +98,10 @@ personaController.update = (req, res) => {
     const newPersona = req.body;
     req.getConnection((err, conn) => {
         conn.query('UPDATE personas SET ? WHERE rutpersona = ?', [newPersona, rutpersona], (err, rows) => {
-            res.redirect('persona');
+            if (err) {
+                console.log(err);
+            }
+            res.redirect('/persona');
         });
     });
 };

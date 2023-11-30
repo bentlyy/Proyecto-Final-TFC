@@ -29,8 +29,8 @@
                                 <td><%= item.ubicacion %></td>
                                 <td><%= item.fechanacimiento %></td>
                                 <td>
-                                    <a href="/delete/<%= item.rutpersona %> " class="btn btn-danger">Delete</a>
-                                    <a href="/update/<%= item.rutpersona %> " class="btn btn-info">Update</a>
+                                    <a href="/persona/delete/<%= item.rutpersona %> " class="btn btn-danger">Delete</a>
+                                    <a href="/persona/update/<%= item.rutpersona %> " class="btn btn-info">Update</a>
                                 </td>
                                 
                                 
@@ -44,7 +44,7 @@
         <div class="col-md-5">
            <div class="card">
             <div class="card-body">
-                <form action="/add" method="post">
+                <form action="/persona/add" method="post">
                     <div class="form-group">
                         <input type="text" name="rutpersona" placeholder="Rut" class="form-control">
                     </div>
