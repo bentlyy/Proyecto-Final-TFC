@@ -1,0 +1,19 @@
+<%- include ('partials/_header') %>
+
+<div class="container">
+    <h2 class="mt-4">Comentarios de Reservas</h2>
+    <% if (data && data.length > 0) { %>
+        <% data.forEach(function(reserva) { %>
+            <div class="card reserva-comment mt-4">
+                <div class="card-body">
+                    <p class="card-text comentario-text"><%= reserva.comentario %></p>
+                    <h5 class="card-title reserva-info"><%= reserva.rutpersona %> - <%= reserva.fechareserva %></h5>
+                </div>
+            </div>
+        <% }); %>
+    <% } else { %>
+        <p class="mt-4">No hay comentarios de reservas disponibles.</p>
+    <% } %>
+</div>
+
+<%- include ('partials/_footer') %>

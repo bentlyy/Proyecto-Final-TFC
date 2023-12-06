@@ -25,6 +25,7 @@ app.use(express.urlencoded({ extended: false }));
 
 
 
+
 const session = require('express-session');
 app.use(session({
   secret: 'secret',
@@ -48,6 +49,7 @@ const reservaRoutes = require('./routes/reserva');
 const salaRoutes = require('./routes/sala');
 const usuarioRoutes = require('./routes/usuario');
 const menuRoutes = require('./routes/menu');
+const comentarioRoutes = require('./routes/comentario');
 
 // Routes
 app.use('/persona',personaRoutes);
@@ -57,6 +59,7 @@ app.use('/reserva', reservaRoutes);
 app.use('/sala', salaRoutes);
 app.use('/usuario', usuarioRoutes);
 app.use('/menu', menuRoutes);
+app.use('/comentario',comentarioRoutes);
 
 
 

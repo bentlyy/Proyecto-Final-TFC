@@ -1,6 +1,7 @@
 <%- include ('partials/_header') %>
 
 <div class="container">
+    <div><a href="/comentario">Comentarios</a></div>
     <div class="row">
         <div class="col-md-7">
             <table class="table table-bordered table-hover">
@@ -24,8 +25,8 @@
                                 <td><%= item.comentario %></td>
                                 <td><%= item.estado %></td>
                                 <td>
-                                    <a href="/delete/<%= item.reservaid %> " class="btn btn-danger">Delete</a>
-                                    <a href="/update/<%= item.reservaid %> " class="btn btn-info">Update</a>
+                                    <a href="/reserva/delete/<%= item.reservaid %> " class="btn btn-danger">Delete</a>
+                                    <a href="/reserva/update/<%= item.reservaid %> " class="btn btn-info">Update</a>
                                 </td>
                             </tr>
                         <% }); %>
@@ -33,6 +34,7 @@
                 </tbody>
             </table>
         </div>
+       
         <div class="col-md-5">
            <div class="card">
             <div class="card-body">
@@ -41,7 +43,7 @@
                         <input type="date" name="fechareserva" placeholder="Fecha de Reserva" class="form-control">
                     </div>
                     <div class="form-group">
-                        <input type="" name="horainicio" placeholder="Hora de Inicio" class="form-control">
+                        <input type="name" name="horainicio" placeholder="Hora de Inicio" class="form-control">
                     </div>
                     <div class="form-group">
                         <input type="time" name="horafinal" placeholder="Hora Final" class="form-control">

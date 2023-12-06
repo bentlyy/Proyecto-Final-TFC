@@ -7,11 +7,11 @@
             <form action="/reserva/update/<%= data.reservaid %>" method="post">
                 <div class="form-group">
                     <label for="fechareserva">Fecha de Reserva:</label>
-                    <input type="date" name="fechareserva" class="form-control" value="<%= data.fechareserva %>">
+                    <input type="date" name="fechareserva" class="form-control" value="<%= new Date(data.fechareserva).toLocaleDateString('en-CA') %>">
                 </div>
                 <div class="form-group">
                     <label for="horainicio">Hora de Inicio:</label>
-                    <input type="text" name="horainicio" class="form-control" value="<%= data.horainicio %>">
+                    <input type="time" name="horainicio" class="form-control" value="<%= data.horainicio %>">
                 </div>
                 <div class="form-group">
                     <label for="horafinal">Hora Final:</label>
@@ -27,20 +27,22 @@
                 </div>
                 <!-- Agregar campo para seleccionar la persona -->
                 <div class="form-group">
+                    <label for="rutpersona">Persona:</label>
                     <select name="rutpersona" class="form-control">
                         <% if (personas) { %>
                             <% personas.forEach(function(persona) { %>
-                                <option value="<%= persona.rutpersona %>"><%= persona.nombrepersona %></option>
+                                <option value="<%= persona.rutpersona %>" <%= persona.rutpersona === data.rutpersona ? 'selected' : '' %>><%= persona.nombrepersona %></option>
                             <% }); %>
                         <% } %>
                     </select>
                 </div>
                 <!-- Agregar campo para seleccionar la sala -->
                 <div class="form-group">
+                    <label for="salaid">Sala:</label>
                     <select name="salaid" class="form-control">
                         <% if (salas) { %>
                             <% salas.forEach(function(sala) { %>
-                                <option value="<%= sala.salaid %>"><%= sala.nombresala %></option>
+                                <option value="<%= sala.salaid %>" <%= sala.salaid === data.salaid ? 'selected' : '' %>><%= sala.nombresala %></option>
                             <% }); %>
                         <% } %>
                     </select>

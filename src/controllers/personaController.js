@@ -56,20 +56,38 @@ personaController.delete = (req, res) => {
     req.getConnection((err, conn) => {
         if (err) {
             console.error('Error de conexión:', err);
-            return res.status(500).json(err); 
+            return res.status(500).json(err);
         }
 
-        conn.query('DELETE FROM personas WHERE rutpersona = ?', [rutpersona], (err, result) => {
+        // Verificar si existen reservas asociadas a la persona
+        conn.query('SELECT COUNT(*) as count FROM reservas WHERE rutpersona = ?', [rutpersona], (err, result) => {
             if (err) {
-                console.error('Error al eliminar datos:', err);
-                return res.status(500).json(err); 
+                console.error('Error al verificar reservas:', err);
+                return res.status(500).json(err);
             }
 
-            console.log('Datos eliminados correctamente');
-            res.redirect('persona');
+            const reservationCount = result[0].count;
+
+            if (reservationCount > 0) {
+                // Si hay reservas asociadas, mostrar un mensaje
+                const errorMessage = 'No se puede eliminar la persona porque tiene reservas asociadas.';
+                return res.status(400).send(errorMessage);
+            }
+
+            // Si no hay reservas asociadas, proceder con la eliminación de la persona
+            conn.query('DELETE FROM personas WHERE rutpersona = ?', [rutpersona], (err, result) => {
+                if (err) {
+                    console.error('Error al eliminar persona:', err);
+                    return res.status(500).json(err);
+                }
+
+                console.log('Datos eliminados correctamente');
+                res.redirect('persona');
+            });
         });
     });
 };
+
 
 personaController.edit = (req, res) => {
     const { rutpersona } = req.params;

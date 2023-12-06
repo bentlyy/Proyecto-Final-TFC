@@ -26,8 +26,8 @@
                                 <td><%= item.contraseña %></td>
                                 
                                 <td>
-                                    <a href="/delete/<%= item.usuarioid %> " class="btn btn-danger">Delete</a>
-                                    <a href="/update/<%= item.usuarioid %> " class="btn btn-info">Update</a>
+                                    <a href="/usuario/delete/<%= item.usuarioid %> " class="btn btn-danger">Delete</a>
+                                    <a href="/usuario/update/<%= item.usuarioid %> " class="btn btn-info">Update</a>
                                 </td>
                             </tr>
                         <% }); %>
@@ -39,7 +39,7 @@
         <div class="col-md-5">
            <div class="card">
             <div class="card-body">
-                <form action="/add" method="post">
+                <form action="/usuario/add" method="post">
                     <div class="form-group">
                         <input type="text" name="rutusuario" placeholder="Rut" class="form-control">
                     </div>
